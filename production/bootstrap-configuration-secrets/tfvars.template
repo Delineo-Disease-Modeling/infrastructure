@@ -1,0 +1,12 @@
+github_actions_runner_pat =
+github_api_pat =
+github_container_ui_install_pat =
+oauth_client_secret =
+oauth_secret =
+actions_runner_vm_admin_password =
+mysql_admin_password =
+mysql_appuser_password =
+runner_shared_secret =
+session_secret =
+webhook_shared_secret =
+certificate_basename =

@@ -1,0 +1,5 @@
+#! /bin/sh
+
+ln -sf ../../backend.tf .backend.auto.tfvars
+terraform init -backend-config=.backend.auto.tfvars
+

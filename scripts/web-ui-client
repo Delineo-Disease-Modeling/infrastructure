@@ -1,0 +1,19 @@
+#! /bin/bash
+
+set -e
+
+if [ -z "$1" ]; then
+    echo "Usage: web-ui-client ENV"
+    exit 1
+fi
+
+ENV_DIR=$1
+ENV=$(basename $ENV_DIR)
+
+pushd $ENV_DIR/web-ui
+RESOURCE_GROUP=$(terraform output --raw resource_group_name)
+CONTAINER_GROUP=$(terraform output --raw container_group_name)
+CONTAINER=$(terraform output --raw container_name)
+popd
+
+az container exec -g $RESOURCE_GROUP -n $CONTAINER_GROUP --container-name $CONTAINER --exec-command "/bin/sh"

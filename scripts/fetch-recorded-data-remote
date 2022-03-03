@@ -1,0 +1,36 @@
+#! /bin/bash
+
+set -e
+
+if [ -z "$1" ]; then
+    echo "Usage: fetch-recorded-data-remote ENV"
+    exit 1
+fi
+
+ENV_DIR=$1
+ENV=$(basename $ENV_DIR)
+
+pushd $ENV_DIR/control-plane
+REPO_NWO=$(terraform output --raw control_repo_nwo)
+popd
+
+VARS=$ENV_DIR/control-plane/.auto.tfvars.json
+
+if [ ! -f "$VARS" ]; then
+    echo "$VARS does not exist"
+    exit 1
+fi
+
+TOKEN=$(jq -r .github_admin_pat $VARS)
+
+if [ -z "$TOKEN" ]; then
+    echo "No github_admin_pat found in $VARS"
+    exit 1
+fi
+
+curl \
+  -X POST \
+  -H "Authorization: token $TOKEN" \
+  -H "Accept: application/vnd.github.v3+json" \
+  https://api.github.com/repos/${REPO_NWO}/dispatches \
+  -d "{\"event_type\":\"fetch-recorded-data\"}"

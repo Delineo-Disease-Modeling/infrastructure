@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$2" ]; then
+    echo "Usage: authorize-user ENV GITHUB_ID"
+    exit 1
+fi
+
+ENV_DIR=$1
+ENV=$(basename $ENV_DIR)
+GITHUB_ID=$2
+
+pushd $ENV_DIR/database-server
+MYSQL_HOST=$(terraform output --raw mysql_server_name_fqdn)
+popd
+
+pushd $ENV_DIR/database
+MYSQL_USER=$(terraform output --raw mysql_db_username)
+MYSQL_DATABASE=$(terraform output --raw mysql_db_name)
+popd
+
+pushd $ENV_DIR/configuration
+KEY_VAULT=$(terraform output --raw key_vault_name)
+popd
+
+export MYSQL_PWD=$(az keyvault secret show --name mysql-appuser-password --vault-name $KEY_VAULT | jq -r .value)
+
+mysql \
+    --host=$MYSQL_HOST \
+    --user=$MYSQL_USER \
+    --database=$MYSQL_DATABASE \
+    --execute="INSERT INTO authorized_users (github_user_login) VALUES (\"$GITHUB_ID\");"
