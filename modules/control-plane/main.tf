@@ -49,6 +49,13 @@ resource "github_actions_secret" "keep_artifacts" {
   plaintext_value = var.keep_artifacts
 }
 
+resource "github_actions_secret" "api_url" {
+  count           = var.proxy_url != "" ? 1 : 0
+  repository      = var.repo_name
+  secret_name     = "API_URL"
+  plaintext_value = var.proxy_url
+}
+
 resource "github_actions_secret" "runner_version" {
   repository      = var.repo_name
   secret_name     = "RUNNER_VERSION"

@@ -38,15 +38,10 @@ module "control-plane" {
   gpr_user                = var.build_container_user
   gpr_pat                 = data.azurerm_key_vault_secret.secrets["github_container_ui_install_pat"].value
   keep_artifacts          = "log"
+  proxy_url		  = var.proxy_url
   runner_version          = "1.2.1"
   webhook_server_address  = data.terraform_remote_state.actions_runner_controller.outputs.github_webhook_server_address
   webhook_shared_secret   = data.azurerm_key_vault_secret.secrets["webhook_shared_secret"].value
-}
-
-resource "github_actions_secret" "production_server_url" {
-  repository      = "control-plane-production"
-  secret_name     = "STAGING_SERVER_URL"
-  plaintext_value = var.proxy_url
 }
 
 data "terraform_remote_state" "actions_runner_controller" {

@@ -40,6 +40,12 @@ variable "keep_artifacts" {
   description = "A comma-separated list of GitHub Actions for each build: input,output,log"
 }
 
+variable "proxy_url" {
+  type        = string
+  description = "The externally visible URL for the service (including protocol)"
+  default     = ""
+}
+
 variable "runner_version" {
   type        = string
   description = "Version of model-runner package to install"

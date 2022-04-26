@@ -21,39 +21,44 @@ variable "container_name" {
 }
 
 variable "resource_group_prefix" {
+  default     = "delineo"
   type        = string
   description = "Short prefix used in resource group / storage account names. These should be meaningful to your deployment, as they are used in some resource names which need to be *globally* unique in Azure"
 }
 
 variable "ui_container_registry_user" {
+  default     = "DelineoCovidUI"
   type        = string
   description = "The user ID to log in to the container image registry"
 }
 
 variable "control_repo" {
+  default     = "Delineo-Disease-Modeling/control-plane-production"
   type        = string
   description = "The name-with-owner of the control plane repo to dispatch to."
 }
 
 variable "github_client_id" {
+  default     = "b5015380a6627df0cc4c"
   type        = string
   description = "The client ID for a GitHub OAuth application."
 }
 
 variable "proxy_url" {
+  default     = "delineo-web-prod.uksouth.azurecontainer.io"
   type        = string
   description = "The externally visible URL for the service (excluding protocol)"
 }
 
 variable "letsencrypt_challenge_name" {
+  default     = "2mDdGrVVKHkyvZSttqFbUhBI3hqkuLZieT1kw2uFprI"
   type        = string
   description = "Let's Encrypt HTTP Challenge filename (must be for the expected proxy_url)"
-  default     = ""
 }
 
 variable "letsencrypt_challenge_value" {
+  default     = "2mDdGrVVKHkyvZSttqFbUhBI3hqkuLZieT1kw2uFprI.bF7jhNKlhQ3dfZzPzcSPpQQV4NCZA-i4HCZistfSMc8"
   type        = string
   description = "Let's Encrypt HTTP Challenge value (must be for the expected proxy_url)"
   sensitive   = true
-  default     = ""
 }

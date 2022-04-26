@@ -14,6 +14,7 @@ variable "container_name" {
 }
 
 variable "resource_group_prefix" {
+  default     = "delineo"
   type        = string
   description = "Short prefix used in resource group / storage account names. These should be meaningful to your deployment, as they are used in some resource names which need to be *globally* unique in Azure"
 }

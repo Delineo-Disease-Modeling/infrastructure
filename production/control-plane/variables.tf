@@ -21,16 +21,19 @@ variable "container_name" {
 }
 
 variable "github_organization" {
+  default     = "Delineo-Disease-Modeling"
   type        = string
   description = "A GitHub organization containing the control_plane repo"
 }
 
 variable "build_container_user" {
+  default     = "DelineoCovidUI"
   type        = string
   description = "A GitHub user for pushing Docker images"
 }
 
 variable "proxy_url" {
+  default     = "delineo-web-prod.uksouth.azurecontainer.io"
   type        = string
   description = "The externally visible URL for the service (including protocol)"
 }

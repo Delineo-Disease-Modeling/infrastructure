@@ -14,6 +14,7 @@ variable "container_name" {
 }
 
 variable "control_repo_nwo" {
+  default     = "Delineo-Disease-Modeling/control-plane-production"
   type        = string
   description = "The name (with owner) of the control-plane repo"
 }

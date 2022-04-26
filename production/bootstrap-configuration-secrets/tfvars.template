@@ -1,12 +1,12 @@
-github_actions_runner_pat =
-github_api_pat =
-github_container_ui_install_pat =
-oauth_client_secret =
-oauth_secret =
-actions_runner_vm_admin_password =
-mysql_admin_password =
-mysql_appuser_password =
-runner_shared_secret =
-session_secret =
-webhook_shared_secret =
-certificate_basename =
+github_actions_runner_pat = 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
+github_api_pat = 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
+github_container_ui_install_pat = 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
+oauth_client_secret = 06b58e4f3bd5202a4cf45dae08d0f2b8ec50024e
+oauth_secret = 7EEHCqEmudH/sgoYiihDiN+jsjveX5d47xy4BQQ3KeY=
+actions_runner_vm_admin_password = 7+D3QU1gjoJi103fDidGkIu9GBHAhJVDz4KTrrE+yL8=
+mysql_admin_password = VRmisBoeOGZ+mNaAJX6twpURVTTDhkq8iBczdEpKRyg=
+mysql_appuser_password = 8YiHHHK5nbwGwNL8h5VD+FAkhjo/K+I2DXRtOi5oBRY=
+runner_shared_secret = i8d/fwuicQaZ1GpgBnp9b8Di8MGClDxfkWXiLdp7ALM=
+session_secret = NQz6FvIXeqjhRYOOvzpgMPKFWC+zpUvQHyM8LKL1iu0=
+webhook_shared_secret = +v1E3ucxLRnASCmZI5LhAMhOyNVKQGfF0dhXjp2CiLc=
+certificate_basename = 
