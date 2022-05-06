@@ -67,7 +67,7 @@ module "web-ui" {
   source = "../../modules/web-ui"
 
   name                           = "${var.resource_group_prefix}-web-prod"
-  ui_container_image_tag         = "v0.0.15"
+  ui_container_image_tag         = "v0.6.0"
   ui_container_registry_user     = var.ui_container_registry_user
   ui_container_registry_password = data.azurerm_key_vault_secret.secrets["github_container_ui_install_pat"].value
   blob_store_account             = data.terraform_remote_state.blob_store.outputs.blob_store_account_name
