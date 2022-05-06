@@ -399,14 +399,11 @@ If you prefer, you can instead follow [SETUP-LE.md](SETUP-LE.md) which does not 
 1. In your browser, on the website, select `Sign in with GitHub`. You will be redirected to a page on GitHub, displaying your OAuth App name and details. You can then select `Authorize <your app>` to login.
 
 1. Select `Create new simulation`. You will need to enter at least one policy change through the `⊕ Add policy changes`, and choose `Submit simulation`.
-
-1. Your simulation should have been submitted. You can go to your control-plane repo in GitHub and select `Actions`. You should see a run labelled `run-simulation` in progress. Select it, and on the left you should see one or more jobs named "run-&lt;model&gt;". Some may be pending and others in progress. You can select any in-progress job to see the current output from it.
-
-1. You can also go to Azure and view the "&lt;prefix&gt;-model-runner-prod-scaleset" resource. Select `Scaling"`in the left-hand menu, then `Run history`, and `1 hour`. You should see a chart showing there is one instance running. As your simulations continue to run, this should increase.
+    * Note that it might take some time for (around 5-10 minutes) for the first job to be picked up and start running.
+    * You can go to Azure and view the "&lt;prefix&gt;-covid-runner-prod-aks" resource to view what is happening. For example, select `Workloads`in the left-hand menu, then `Pods`, and you will see a list of pods. For each simulation, a pod called `actions-runner-<digits>-<digits>` will be created. You can also see charts of the overall cluster, e.g. select `Metrics` in the left-hand menu, then the metric `Total number of available cpu cores in a managed cluster`, and you should see a chart showing the total number of cores. As your simulations continue to run, this should increase.
 
 1. Once your simulations have completed (checking in your control-plane), you should see the results in the web-ui.
-
-1. If no more simulations are executed, the number of instances in the scaleset should begin to reduce, although it may take 5-10 minutes until this happens.
+    * If no more simulations are executed, the number of nodes in the cluster should begin to reduce, although it may take 5-10 minutes until this happens.
 
 1. The web-ui makes use of case and intervention data from external sources, which must be loaded into the database. This is normally done via a scheduled job (initiated from your control-plane repo). If you wish to load data immediately instead of waiting for the first scheduled run, you can do so by running:
 
@@ -430,6 +427,6 @@ If you prefer, you can instead follow [SETUP-LE.md](SETUP-LE.md) which does not 
     * Include `backend.tf`.
     * Include any changes to any `variables.tf` files.
     * Include any changes to any `.terraform.lock.hcl` files.
-    * **Do not include any .auto.tfvars or .auto.tfvars.json files** (these should be ignored by default, but this is important to reiterate.
+    * **Do not include any .auto.tfvars or .auto.tfvars.json files** (these should be ignored by default, but this is important to reiterate)
 1. You may wish to update the `README.md` file with information specific to your deployment.
 
