@@ -91,6 +91,10 @@ The authentication may expire and need to be refreshed periodically.
 
 For the `control-plane` and `web-ui` services, you'll also need to authenticate with GitHub.
 First, create a [GitHub Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with the scope `repo`.
+Note that this token allows access to any repositories you have access to.
+Give it a meaningful name, and ensure you keep it secure.
+We recommend leaving "Expiration" at its default (or shorter).
+
 Then, create the file `<environment>/<service>/.auto.tfvars.json` with the following contents:
 
 ```
@@ -98,6 +102,8 @@ Then, create the file `<environment>/<service>/.auto.tfvars.json` with the follo
     "github_admin_pat": "<token>"
 }
 ```
+
+Note that if the token expires (as suggested), you will need to update this value.
 
 There may be [alternative authentication options](https://registry.terraform.io/providers/integrations/github/latest/docs) such as setting a `GITHUB_TOKEN` environment variable, but they have not been tested.
 
@@ -197,7 +203,80 @@ There are a number of scripts available for manipulating the remote database:
 * In *`web-ui/models.yml`*, update the value of the `imageURL` for the appropriate model.
 * Release a new version of the `web-ui` as documented above.
 
+### Renewing HTTPS certificate
+
+#### Obtaining a new certificate (Let's Encrypt only)
+
+1. Change to the web-ui service for the appropriate environment (`cd <environment>/web-ui`).
+
+1. Run `terraform output web_ui_fqdn`
+
+1. In a separate terminal window, run
+
+    ```bash
+    sudo certbot certonly --manual --preferred-challenges http
+    ```
+
+    This will ask you a number of questions. One of these will be for the domain name, where you should enter the value from the previous command. At the end, it will ask you to place a file with particular contents in a particular location. **Do not** press Enter yet.
+
+1. Edit `variables.tf` to update the default value to the `letsencrypt_challenge_value` variable with the challenge value shown. This is the long string that follows the: `Create a file containing just this data:` output produced by certbot.
+
+1. Update the default value to the `letsencrypt_challenge_name` variable with the final section of the URL (this should be a substring of the challenge value), i.e. the string that follows the `.well-known/acme-challenge/` part of the URL or something similar.
+
+1. Run `terraform plan`. This should tell you that it needs to destroy and re-create one resource.
+
+1. Run `terraform apply`, and as before it should repeat the plan, ask for confirmation, then create resources after you enter *yes*.
+
+1. Run (make sure to use *http*, not *https*):
+
+      ```bash
+      curl http://<domain>/.well-known/acme-challenge/<challenge_name>
+      ```
+
+      This should return the challenge value.
+
+1. In your other terminal, press Enter to continue the `certbot` command. This will now produce an SSL certificate and private key.
+
+1. In order to apply the new certificate, the certificate and private key need to be readable by user.
+   The simplest way to do this is to copy them somewhere and change the ownership:
+
+  ```bash
+  sudo cp /etc/letsencrypt/live/<domain>/fullchain.pem .
+  sudo cp /etc/letsencrypt/live/<domain>/privkey.pem .
+  sudo chown <your uid>:<your gid> fullchain.pem privkey.pem
+  ```
+
+1. Follow the instructions below for applying a new certificate.
+
+1. Delete the copies of the certificate and private key:
+
+  ```bash
+  rm fullchain.pem privkey.pem
+  ```
+
+#### Applying a new certificate (any CA)
+
+To apply a new certificate, you will need to have the full certificate chain and private key file in PEM format.
+You can then run the script `scripts/replace-crt <environment> <certificate file> <key file>` to update the values in the key-vault (this will not update the running server yet).
+Next, change to the *web-ui* service for the appropriate environment (`cd <environment>/web-ui`), and run `terraform apply`.
+This should tell you that it needs to destroy and re-create one resource.
+Check everything appears okay, and apply the changes if so.
+Once it is complete, go to your domain in a browser and test that the new certificate appears.
+
 ### Debugging
+
+#### Logs
+
+There are a variety of logs that may be useful when debugging issues.
+These can be accessed through either the Azure Portal or GitHub website as appropriate.
+
+* web-ui (Node.js logs): Azure Portal > web-ui > Containers > web-ui > Logs
+* web-ui (nginx logs): Azure Portal > web-ui > Containers > nginx-with-ssl > Logs
+* model-runner: GitHub > control-plane > Actions > (run-simulation) > run-&lt;model&gt; > Run Docker container
+* actions-runner-controller: Azure Portal > covid-runner-<environment>-aks > Workloads > Deployments > actions-runner-controller > Live logs > Select a pod > actions-runner-controller-<digits>-<digits>
+  * Note that historical logs are not collected. If you're trying to debug an issue, you will need to have this page open while recreating it.
+* actions-runner-controller (webhook): Azure Portal > covid-runner-<environment>-aks > Workloads > Deployments > actions-runner-controller-webhook > Live logs > Select a pod > actions-runner-controller-<digits>-<digits>
+  * As above, historical logs are not collected.
 
 #### Kubernetes
 

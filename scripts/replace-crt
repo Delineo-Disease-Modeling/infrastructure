@@ -10,7 +10,7 @@ fi
 ENV_DIR=$1
 ENV=$(basename $ENV_DIR)
 CRT_FILE=$2
-KEY_FILE=$2
+KEY_FILE=$3
 
 pushd $ENV_DIR/configuration
 VAULT_NAME=$(terraform output --raw key_vault_name)
