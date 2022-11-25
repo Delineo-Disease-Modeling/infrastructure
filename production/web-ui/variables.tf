@@ -51,13 +51,13 @@ variable "proxy_url" {
 }
 
 variable "letsencrypt_challenge_name" {
-  default     = "JCs1hfo4rNz_GChunB916QO0wgZ9mIfTXuZupOXkfmE"
+  default     = "jR9lqzZz22BQZFbYisg2YehR6xuyhAX4U41xm9UdvuM"
   type        = string
   description = "Let's Encrypt HTTP Challenge filename (must be for the expected proxy_url)"
 }
 
 variable "letsencrypt_challenge_value" {
-  default     = "JCs1hfo4rNz_GChunB916QO0wgZ9mIfTXuZupOXkfmE.EeVgBZrSuHXuq3WhWkIbg0c7iI4E0dZ80J0qvviAyow"
+  default     = "jR9lqzZz22BQZFbYisg2YehR6xuyhAX4U41xm9UdvuM.EeVgBZrSuHXuq3WhWkIbg0c7iI4E0dZ80J0qvviAyow"
   type        = string
   description = "Let's Encrypt HTTP Challenge value (must be for the expected proxy_url)"
   sensitive   = true
