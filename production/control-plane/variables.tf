@@ -2,7 +2,7 @@ variable "github_admin_pat" {
   type        = string
   sensitive   = true
   description = "A GitHub personal access token for updating repository secrets"
-  default     = ""
+  default     = "Delineo-Disease-Modeling"
 }
 
 variable "resource_group_name" {
